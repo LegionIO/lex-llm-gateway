@@ -7,7 +7,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway do
     expect(Legion::Extensions::LLM::Gateway::VERSION).not_to be_nil
   end
 
-  it 'version is 0.1.0' do
-    expect(Legion::Extensions::LLM::Gateway::VERSION).to eq('0.1.0')
+  it 'version is 0.2.0' do
+    expect(Legion::Extensions::LLM::Gateway::VERSION).to eq('0.2.0')
   end
 end
