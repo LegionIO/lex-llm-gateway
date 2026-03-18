@@ -55,7 +55,12 @@ module Legion
             def call_llm(method_name, **)
               return { error: 'llm_not_available' } unless defined?(Legion::LLM)
 
-              Legion::LLM.public_send(method_name, **)
+              direct = :"#{method_name}_direct"
+              if Legion::LLM.respond_to?(direct)
+                Legion::LLM.public_send(direct, **)
+              else
+                Legion::LLM.public_send(method_name, **)
+              end
             end
 
             def meter_response(response, **)
