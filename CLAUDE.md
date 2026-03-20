@@ -101,7 +101,7 @@ bundle exec rubocop      # 0 offenses
 
 ## Design Doc
 
-`docs/plans/2026-03-18-llm-gateway-design.md`
+`docs/work/completed/2026-03-18-llm-gateway-design.md`
 
 ---
 
