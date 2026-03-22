@@ -9,28 +9,28 @@ module Legion
             module_function
 
             def chat(model: nil, provider: nil, **opts)
-              start_ms = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+              start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
               response = dispatch_chat(model: model, provider: provider, **opts)
-              elapsed_ms = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond) - start_ms
+              elapsed_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond) - start_ms
               meter_response(response, request_type: 'chat', provider: provider,
                                        model_id: model, latency_ms: elapsed_ms, **opts.slice(:tier, :intent))
               response
             end
 
             def embed(text: nil, model: nil, provider: nil, **)
-              start_ms = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+              start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
               response = call_llm(:embed, text: text, model: model, provider: provider, **)
-              elapsed_ms = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond) - start_ms
+              elapsed_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond) - start_ms
               meter_response(response, request_type: 'embed', provider: provider, model_id: model,
                                        latency_ms: elapsed_ms)
               response
             end
 
             def structured(messages: nil, schema: nil, model: nil, provider: nil, **)
-              start_ms = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+              start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
               response = call_llm(:structured, messages: messages, schema: schema, model: model,
                                                provider: provider, **)
-              elapsed_ms = Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond) - start_ms
+              elapsed_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond) - start_ms
               meter_response(response, request_type: 'structured', provider: provider, model_id: model,
                                        latency_ms: elapsed_ms)
               response

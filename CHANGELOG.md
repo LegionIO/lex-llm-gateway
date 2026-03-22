@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.2] - 2026-03-22
+
+### Fixed
+- Replace bare `Process` with `::Process` in `Runners::Inference` (6 occurrences) to avoid resolving to `Legion::Process` instead of Ruby stdlib `::Process`, which caused a `NameError` and silently failed inference calls
+
 ## [0.2.1] - 2026-03-20
 
 ### Fixed
