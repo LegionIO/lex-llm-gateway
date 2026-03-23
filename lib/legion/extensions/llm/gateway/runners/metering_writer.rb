@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../helpers/cost_estimator'
+
 module Legion
   module Extensions
     module LLM
@@ -23,7 +25,10 @@ module Legion
             end
 
             def normalize_record(payload)
-              identity_fields(payload).merge(metric_fields(payload)).merge(cost_field(payload))
+              identity_fields(payload)
+                .merge(trace_fields(payload))
+                .merge(metric_fields(payload))
+                .merge(cost_field(payload))
             end
 
             def identity_fields(payload)
@@ -34,6 +39,15 @@ module Legion
                 model_id: payload[:model_id],
                 routing_reason: payload[:routing_reason],
                 recorded_at: payload[:recorded_at] || Time.now.utc
+              }
+            end
+
+            def trace_fields(payload)
+              {
+                status: payload[:status],
+                event_type: payload[:event_type],
+                extension: payload[:extension],
+                runner_function: payload[:runner_function]
               }
             end
 

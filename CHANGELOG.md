@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.8] - 2026-03-23
+
+### Added
+- MeteringWriter now passes trace context fields (status, event_type, extension, runner_function) to metering_records
+- require_relative for CostEstimator in MeteringWriter to fix standalone require
+
+### Changed
+- identity_fields split into identity_fields + trace_fields for rubocop compliance
+
 ## [0.2.7] - 2026-03-23
 
 ### Added

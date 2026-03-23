@@ -156,6 +156,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::MeteringWriter do
         worker_id task_id provider model_id
         input_tokens output_tokens thinking_tokens total_tokens
         latency_ms wall_clock_ms routing_reason recorded_at cost_usd
+        status event_type extension runner_function
       ]
       expect(result.keys).to match_array(expected_keys)
     end
