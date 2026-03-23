@@ -78,6 +78,16 @@ module Legion
             end
 
             def wait_for_response(correlation_id, timeout:)
+              future = Helpers::ReplyDispatcher.register(correlation_id)
+              result = future.value!(timeout)
+              result || timeout_result(correlation_id, timeout)
+            rescue Concurrent::CancelledOperationError
+              timeout_result(correlation_id, timeout)
+            ensure
+              Helpers::ReplyDispatcher.deregister(correlation_id)
+            end
+
+            def timeout_result(correlation_id, timeout)
               { success: false, error: 'fleet_timeout', correlation_id: correlation_id, timeout: timeout }
             end
 

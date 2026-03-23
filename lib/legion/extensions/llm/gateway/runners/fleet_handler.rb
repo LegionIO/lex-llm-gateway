@@ -10,10 +10,16 @@ module Legion
 
             def handle_fleet_request(payload)
               token = payload[:signed_token]
-              return { success: false, error: 'invalid_token' } if require_auth? && !valid_token?(token)
+              if require_auth? && !valid_token?(token)
+                error_response = { success: false, error: 'invalid_token' }
+                publish_reply(payload[:reply_to], payload[:correlation_id], error_response) if payload[:reply_to]
+                return error_response
+              end
 
               response = call_local_llm(payload)
-              build_response(payload[:correlation_id], response)
+              response_hash = build_response(payload[:correlation_id], response)
+              publish_reply(payload[:reply_to], payload[:correlation_id], response_hash) if payload[:reply_to]
+              response_hash
             end
 
             def require_auth?
@@ -45,6 +51,32 @@ module Legion
                 provider: extract_field(response, :provider),
                 model_id: extract_field(response, :model)
               }
+            end
+
+            def publish_reply(reply_to, correlation_id, response_hash) # rubocop:disable Metrics/MethodLength
+              return unless defined?(Legion::Transport)
+
+              payload = if defined?(Legion::JSON)
+                          Legion::JSON.dump(response_hash)
+                        else
+                          require 'json'
+                          JSON.generate(response_hash)
+                        end
+
+              channel = Legion::Transport.connection.create_channel
+              channel.default_exchange.publish(
+                payload,
+                routing_key: reply_to,
+                correlation_id: correlation_id,
+                content_type: 'application/json'
+              )
+              channel.close
+            rescue StandardError => e
+              log_warn("FleetHandler: publish_reply failed: #{e.message}")
+            end
+
+            def log_warn(msg)
+              Legion::Logging.warn(msg) if defined?(Legion::Logging)
             end
 
             def extract_token(response, field)

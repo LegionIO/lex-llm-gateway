@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.4] - 2026-03-23
+
+### Added
+- Implement fleet RPC `wait_for_response` with `Concurrent::Promises` future and correlation ID matching
+- Add `Helpers::ReplyDispatcher` process-singleton for managing reply queue consumer and pending futures
+- Add `FleetHandler.publish_reply` to send `InferenceResponse` back to requester via AMQP default exchange
+
+### Fixed
+- Fix `Actor::InferenceWorker` runner_class mismatch: now points to `FleetHandler` instead of `Inference`
+- Add `use_runner? false` to InferenceWorker so it dispatches directly to the runner module
+
 ## [0.2.3] - 2026-03-22
 
 ### Changed

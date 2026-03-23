@@ -87,6 +87,34 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
         expect(result[:provider]).to eq('anthropic')
         expect(result[:model_id]).to eq('claude-opus-4-6')
       end
+
+      context 'with reply_to in payload' do
+        let(:payload) do
+          {
+            signed_token: 'valid.jwt.token',
+            correlation_id: 'corr-123',
+            model: 'claude-opus-4-6',
+            messages: [{ role: 'user', content: 'Hello' }],
+            reply_to: 'agent.queue.requester'
+          }
+        end
+
+        it 'calls publish_reply with the reply_to queue' do
+          allow(described_class).to receive(:publish_reply)
+          described_class.handle_fleet_request(payload)
+          expect(described_class).to have_received(:publish_reply).with(
+            'agent.queue.requester', 'corr-123', hash_including(:correlation_id)
+          )
+        end
+      end
+
+      context 'without reply_to in payload' do
+        it 'does not call publish_reply' do
+          allow(described_class).to receive(:publish_reply)
+          described_class.handle_fleet_request(payload)
+          expect(described_class).not_to have_received(:publish_reply)
+        end
+      end
     end
 
     context 'when Legion::LLM is not defined' do

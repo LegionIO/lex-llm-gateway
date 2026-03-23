@@ -21,7 +21,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Actor::InferenceWorker do
 
   describe '#runner_class' do
     it 'returns the inference runner class string' do
-      expect(actor.runner_class).to eq('Legion::Extensions::LLM::Gateway::Runners::Inference')
+      expect(actor.runner_class).to eq('Legion::Extensions::LLM::Gateway::Runners::FleetHandler')
     end
   end
 

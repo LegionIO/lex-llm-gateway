@@ -14,8 +14,10 @@ unless defined?(Legion::Transport::Message)
   end
 end
 
+require 'concurrent'
 require 'legion/extensions/llm/gateway/helpers/auth'
 require 'legion/extensions/llm/gateway/helpers/rpc'
+require 'legion/extensions/llm/gateway/helpers/reply_dispatcher'
 require 'legion/extensions/llm/gateway/transport/messages/inference_request'
 require 'legion/extensions/llm/gateway/runners/fleet'
 
@@ -270,13 +272,49 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Fleet do
   end
 
   describe '.wait_for_response' do
-    it 'returns a hash with success: false, fleet_timeout error, and correlation_id' do
-      result = described_class.wait_for_response('test-uuid', timeout: 30)
-      expect(result).to include(
-        success: false,
-        error: 'fleet_timeout',
-        correlation_id: 'test-uuid'
-      )
+    let(:dispatcher) { Legion::Extensions::LLM::Gateway::Helpers::ReplyDispatcher }
+
+    before { dispatcher.reset! }
+
+    after { dispatcher.reset! }
+
+    it 'returns the resolved result when the future completes' do
+      future = Concurrent::Promises.resolvable_future
+      allow(dispatcher).to receive(:register).with('cid-ok').and_return(future)
+      allow(dispatcher).to receive(:deregister)
+
+      Thread.new do
+        sleep 0.05
+        future.fulfill({ success: true, response: 'hi' })
+      end
+
+      result = described_class.wait_for_response('cid-ok', timeout: 5)
+      expect(result).to include(success: true, response: 'hi')
+    end
+
+    it 'returns timeout result when the future does not resolve in time' do
+      future = Concurrent::Promises.resolvable_future
+      allow(dispatcher).to receive(:register).with('cid-slow').and_return(future)
+      allow(dispatcher).to receive(:deregister)
+
+      result = described_class.wait_for_response('cid-slow', timeout: 0.1)
+      expect(result).to include(success: false, error: 'fleet_timeout', correlation_id: 'cid-slow')
+    end
+
+    it 'always calls deregister in ensure block' do
+      future = Concurrent::Promises.resolvable_future
+      allow(dispatcher).to receive(:register).with('cid-ensure').and_return(future)
+      allow(dispatcher).to receive(:deregister)
+
+      described_class.wait_for_response('cid-ensure', timeout: 0.1)
+      expect(dispatcher).to have_received(:deregister).with('cid-ensure')
+    end
+  end
+
+  describe '.timeout_result' do
+    it 'returns a fleet_timeout hash' do
+      result = described_class.timeout_result('test-uuid', 30)
+      expect(result).to eq(success: false, error: 'fleet_timeout', correlation_id: 'test-uuid', timeout: 30)
     end
   end
 end
