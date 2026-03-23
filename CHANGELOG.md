@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.9] - 2026-03-23
+
+### Added
+- UsageReporter runner: summary, worker_usage, budget_check, top_consumers from metering_records
+- UsageQueries helper: extracted query building, aggregation, and period calculation
+- Budget enforcement with configurable monthly_usd and alert_threshold via settings
+- 15 specs covering all reporter methods with in-memory SQLite
+
 ## [0.2.8] - 2026-03-23
 
 ### Added
