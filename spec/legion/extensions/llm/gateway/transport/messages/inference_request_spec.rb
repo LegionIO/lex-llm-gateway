@@ -43,18 +43,15 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::InferenceR
 
   describe '#validate' do
     it 'raises when model is missing' do
-      m = described_class.new(reply_to: 'queue', correlation_id: 'id')
-      expect { m.validate }.to raise_error('model is required')
+      expect { described_class.new(reply_to: 'queue', correlation_id: 'id') }.to raise_error('model is required')
     end
 
     it 'raises when reply_to is missing' do
-      m = described_class.new(model: 'gpt-4o', correlation_id: 'id')
-      expect { m.validate }.to raise_error('reply_to is required')
+      expect { described_class.new(model: 'gpt-4o', correlation_id: 'id') }.to raise_error('reply_to is required')
     end
 
     it 'raises when correlation_id is missing' do
-      m = described_class.new(model: 'gpt-4o', reply_to: 'queue')
-      expect { m.validate }.to raise_error('correlation_id is required')
+      expect { described_class.new(model: 'gpt-4o', reply_to: 'queue') }.to raise_error('correlation_id is required')
     end
 
     it 'sets @valid to true when all required fields are present' do

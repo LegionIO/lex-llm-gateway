@@ -41,8 +41,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::InferenceR
 
   describe '#validate' do
     it 'raises when correlation_id is missing' do
-      m = described_class.new
-      expect { m.validate }.to raise_error('correlation_id is required')
+      expect { described_class.new }.to raise_error('correlation_id is required')
     end
 
     it 'sets @valid to true when correlation_id is present' do

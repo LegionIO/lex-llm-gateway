@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.3] - 2026-03-22
+
+### Changed
+- Add runtime deps: legion-cache >= 1.3.11, legion-crypt >= 1.4.9, legion-data >= 1.4.17, legion-json >= 1.2.1, legion-logging >= 1.3.2, legion-settings >= 1.3.14, legion-transport >= 1.3.9
+- Update spec_helper to require real sub-gem helpers and define Helpers::Lex stub with all 7 includes; require legion/transport for actor base class inheritance
+- Fix transport message specs: expect raise from new instead of validate (real Message#initialize calls validate)
+- Refactor Runners::Inference dispatch_chat and call_llm to resolve Metrics/ModuleLength and Metrics/MethodLength
+
 ## [0.2.2] - 2026-03-22
 
 ### Fixed

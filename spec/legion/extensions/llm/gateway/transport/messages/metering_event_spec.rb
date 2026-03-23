@@ -29,7 +29,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::MeteringEv
     end
 
     it 'defaults to unknown when request_type is absent' do
-      m = described_class.new(provider: 'openai')
+      m = described_class.allocate
+      m.instance_variable_set(:@options, { provider: 'openai' })
       expect(m.routing_key).to eq('metering.unknown')
     end
   end
@@ -48,13 +49,11 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::MeteringEv
 
   describe '#validate' do
     it 'raises when request_type is missing' do
-      m = described_class.new(provider: 'openai')
-      expect { m.validate }.to raise_error('request_type is required')
+      expect { described_class.new(provider: 'openai') }.to raise_error('request_type is required')
     end
 
     it 'raises when provider is missing' do
-      m = described_class.new(request_type: 'completion')
-      expect { m.validate }.to raise_error('provider is required')
+      expect { described_class.new(request_type: 'completion') }.to raise_error('provider is required')
     end
 
     it 'sets @valid to true when all required fields are present' do

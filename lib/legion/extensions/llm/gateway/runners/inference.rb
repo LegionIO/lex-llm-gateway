@@ -38,10 +38,10 @@ module Legion
 
             def dispatch_chat(message: nil, model: nil, provider: nil, **opts)
               tier = opts[:tier]
-              intent = opts[:intent]
+              Legion::Logging.debug "[Gateway::Inference] dispatch_chat tier=#{tier}" if defined?(Legion::Logging)
               if tier == 'fleet' && fleet_available?
                 Fleet.dispatch(model: model, messages: [{ role: 'user', content: message }],
-                               intent: intent)
+                               intent: opts[:intent])
               else
                 call_llm(:chat, message: message, model: model, provider: provider, **opts)
               end
@@ -53,14 +53,14 @@ module Legion
             end
 
             def call_llm(method_name, **)
-              return { error: 'llm_not_available' } unless defined?(Legion::LLM)
+              unless defined?(Legion::LLM)
+                Legion::Logging.warn '[Gateway::Inference] Legion::LLM not defined' if defined?(Legion::Logging)
+                return { error: 'llm_not_available' }
+              end
 
               direct = :"#{method_name}_direct"
-              if Legion::LLM.respond_to?(direct)
-                Legion::LLM.public_send(direct, **)
-              else
-                Legion::LLM.public_send(method_name, **)
-              end
+              target = Legion::LLM.respond_to?(direct) ? direct : method_name
+              Legion::LLM.public_send(target, **)
             end
 
             def meter_response(response, **)
