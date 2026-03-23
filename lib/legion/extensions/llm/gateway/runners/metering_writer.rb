@@ -23,7 +23,7 @@ module Legion
             end
 
             def normalize_record(payload)
-              identity_fields(payload).merge(metric_fields(payload))
+              identity_fields(payload).merge(metric_fields(payload)).merge(cost_field(payload))
             end
 
             def identity_fields(payload)
@@ -46,6 +46,15 @@ module Legion
                 latency_ms: payload[:latency_ms].to_i,
                 wall_clock_ms: payload[:wall_clock_ms].to_i
               }
+            end
+
+            def cost_field(payload)
+              cost = payload[:cost_usd] || Helpers::CostEstimator.estimate(
+                model_id: payload[:model_id],
+                input_tokens: payload[:input_tokens].to_i,
+                output_tokens: payload[:output_tokens].to_i
+              )
+              { cost_usd: cost.to_f }
             end
           end
         end

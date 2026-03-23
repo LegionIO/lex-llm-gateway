@@ -155,7 +155,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::MeteringWriter do
       expected_keys = %i[
         worker_id task_id provider model_id
         input_tokens output_tokens thinking_tokens total_tokens
-        latency_ms wall_clock_ms routing_reason recorded_at
+        latency_ms wall_clock_ms routing_reason recorded_at cost_usd
       ]
       expect(result.keys).to match_array(expected_keys)
     end

@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.7] - 2026-03-23
+
+### Added
+- CostEstimator helper: estimates cost_usd from model pricing table and token counts
+- Pricing data for 14 models across Anthropic, OpenAI, and Google providers
+- Fuzzy model matching for versioned/prefixed model IDs
+- MeteringWriter now computes and persists cost_usd on every metering record
+- 10 new CostEstimator specs covering exact pricing, zero tokens, unknown models, fuzzy matching
+
 ## [0.2.6] - 2026-03-23
 
 ### Added
