@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.10] - 2026-03-23
+
+### Added
+- ProviderStats runner: health_report, provider_detail, circuit_summary for LLM provider observability
+- Reports circuit breaker state, routing adjustment, and health status per provider
+- 5 specs covering report generation, detail, circuit summary, and fallback behavior
+
 ## [0.2.9] - 2026-03-23
 
 ### Added
