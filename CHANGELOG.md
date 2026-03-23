@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.5] - 2026-03-23
+
+### Added
+- FleetHandler multi-request-type dispatch: structured, embed, and multi-message chat
+- `call_chat` supports single and multi-message payloads
+- `call_structured` dispatches to `Legion::LLM.structured` with schema
+- `call_embed` dispatches to `Legion::LLM.embed` with text fallback from messages
+
 ## [0.2.4] - 2026-03-23
 
 ### Added

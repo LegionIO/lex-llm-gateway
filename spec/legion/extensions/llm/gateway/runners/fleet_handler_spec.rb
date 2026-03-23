@@ -125,6 +125,113 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
         expect(result[:response]).to eq({ error: 'llm_not_available' })
       end
     end
+
+    context 'with multi-message chat' do
+      let(:payload) do
+        {
+          signed_token: 'valid.jwt.token',
+          correlation_id: 'corr-multi',
+          model: 'claude-opus-4-6',
+          messages: [
+            { role: 'system', content: 'You are helpful.' },
+            { role: 'user', content: 'Hello' }
+          ]
+        }
+      end
+
+      it 'calls Legion::LLM.chat with messages array' do
+        described_class.handle_fleet_request(payload)
+        expect(Legion::LLM).to have_received(:chat).with(
+          model: 'claude-opus-4-6',
+          messages: payload[:messages]
+        )
+      end
+    end
+
+    context 'with structured request type' do
+      let(:schema) { { type: 'object', properties: { name: { type: 'string' } } } }
+      let(:payload) do
+        {
+          signed_token: 'valid.jwt.token',
+          correlation_id: 'corr-struct',
+          model: 'claude-opus-4-6',
+          request_type: 'structured',
+          messages: [{ role: 'user', content: 'Extract the name' }],
+          schema: schema
+        }
+      end
+
+      before do
+        allow(Legion::LLM).to receive(:structured).and_return(llm_response)
+      end
+
+      it 'calls Legion::LLM.structured with model, messages, and schema' do
+        described_class.handle_fleet_request(payload)
+        expect(Legion::LLM).to have_received(:structured).with(
+          model: 'claude-opus-4-6',
+          messages: payload[:messages],
+          schema: schema
+        )
+      end
+
+      it 'does not call Legion::LLM.chat' do
+        described_class.handle_fleet_request(payload)
+        expect(Legion::LLM).not_to have_received(:chat)
+      end
+    end
+
+    context 'with embed request type' do
+      let(:payload) do
+        {
+          signed_token: 'valid.jwt.token',
+          correlation_id: 'corr-embed',
+          model: 'text-embedding-3-small',
+          request_type: 'embed',
+          text: 'Embed this sentence.'
+        }
+      end
+
+      before do
+        allow(Legion::LLM).to receive(:embed).and_return(llm_response)
+      end
+
+      it 'calls Legion::LLM.embed with model and text' do
+        described_class.handle_fleet_request(payload)
+        expect(Legion::LLM).to have_received(:embed).with(
+          model: 'text-embedding-3-small',
+          text: 'Embed this sentence.'
+        )
+      end
+
+      it 'does not call Legion::LLM.chat' do
+        described_class.handle_fleet_request(payload)
+        expect(Legion::LLM).not_to have_received(:chat)
+      end
+    end
+
+    context 'with embed request type falling back to messages' do
+      let(:payload) do
+        {
+          signed_token: 'valid.jwt.token',
+          correlation_id: 'corr-embed-fb',
+          model: 'text-embedding-3-small',
+          request_type: 'embed',
+          messages: [{ role: 'user', content: 'Fallback text' }]
+        }
+      end
+
+      before do
+        allow(Legion::LLM).to receive(:embed).and_return(llm_response)
+      end
+
+      it 'extracts text from messages when text key is absent' do
+        described_class.handle_fleet_request(payload)
+        expect(Legion::LLM).to have_received(:embed).with(
+          model: 'text-embedding-3-small',
+          text: 'Fallback text'
+        )
+      end
+    end
   end
 
   describe '.valid_token?' do

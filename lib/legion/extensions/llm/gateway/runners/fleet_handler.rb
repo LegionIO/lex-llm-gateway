@@ -35,10 +35,36 @@ module Legion
             def call_local_llm(payload)
               return { error: 'llm_not_available' } unless defined?(Legion::LLM)
 
-              Legion::LLM.chat(
+              case payload[:request_type]&.to_s
+              when 'structured'
+                call_structured(payload)
+              when 'embed'
+                call_embed(payload)
+              else
+                call_chat(payload)
+              end
+            end
+
+            def call_chat(payload)
+              messages = payload[:messages]
+              if messages.is_a?(Array) && messages.size > 1
+                Legion::LLM.chat(model: payload[:model], messages: messages)
+              else
+                Legion::LLM.chat(model: payload[:model], message: messages&.dig(0, :content))
+              end
+            end
+
+            def call_structured(payload)
+              Legion::LLM.structured(
                 model: payload[:model],
-                message: payload.dig(:messages, 0, :content)
+                messages: payload[:messages],
+                schema: payload[:schema]
               )
+            end
+
+            def call_embed(payload)
+              text = payload[:text] || payload.dig(:messages, 0, :content)
+              Legion::LLM.embed(model: payload[:model], text: text)
             end
 
             def build_response(correlation_id, response)

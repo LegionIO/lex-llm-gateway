@@ -8,6 +8,6 @@ RSpec.describe Legion::Extensions::LLM::Gateway do
   end
 
   it 'version is 0.2.4' do
-    expect(Legion::Extensions::LLM::Gateway::VERSION).to eq('0.2.4')
+    expect(Legion::Extensions::LLM::Gateway::VERSION).to eq('0.2.5')
   end
 end
