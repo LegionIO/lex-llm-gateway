@@ -63,6 +63,14 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
         described_class.chat(message: 'hello', model: 'claude-opus-4-6', tier: 'fleet')
         expect(Legion::LLM).not_to have_received(:chat)
       end
+
+      it 'passes messages array directly when provided' do
+        multi = [{ role: 'system', content: 'Be brief' }, { role: 'user', content: 'Hi' }]
+        described_class.chat(messages: multi, model: 'claude-opus-4-6', tier: 'fleet')
+        expect(fleet_double).to have_received(:dispatch).with(
+          hash_including(messages: multi)
+        )
+      end
     end
 
     context 'when Legion::LLM is not defined' do
@@ -96,6 +104,27 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
       expect(Legion::Extensions::LLM::Gateway::Runners::Metering)
         .to have_received(:build_event).with(hash_including(request_type: 'embed'))
     end
+
+    context 'when tier is fleet and fleet is available' do
+      let(:fleet_double) { double('Fleet', fleet_available?: true) }
+
+      before do
+        stub_const('Legion::Extensions::LLM::Gateway::Runners::Fleet', fleet_double)
+        allow(fleet_double).to receive(:dispatch).and_return(response)
+      end
+
+      it 'dispatches to Fleet with request_type embed' do
+        described_class.embed(text: 'embed me', model: 'embed-model', tier: 'fleet')
+        expect(fleet_double).to have_received(:dispatch).with(
+          hash_including(model: 'embed-model', request_type: 'embed', text: 'embed me')
+        )
+      end
+
+      it 'does not call Legion::LLM.embed' do
+        described_class.embed(text: 'embed me', model: 'embed-model', tier: 'fleet')
+        expect(Legion::LLM).not_to have_received(:embed)
+      end
+    end
   end
 
   describe '.structured' do
@@ -121,6 +150,27 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
       described_class.structured(messages: messages, schema: schema, model: 'claude-opus-4-6')
       expect(Legion::Extensions::LLM::Gateway::Runners::Metering)
         .to have_received(:build_event).with(hash_including(request_type: 'structured'))
+    end
+
+    context 'when tier is fleet and fleet is available' do
+      let(:fleet_double) { double('Fleet', fleet_available?: true) }
+
+      before do
+        stub_const('Legion::Extensions::LLM::Gateway::Runners::Fleet', fleet_double)
+        allow(fleet_double).to receive(:dispatch).and_return(response)
+      end
+
+      it 'dispatches to Fleet with request_type structured and schema' do
+        described_class.structured(messages: messages, schema: schema, model: 'claude-opus-4-6', tier: 'fleet')
+        expect(fleet_double).to have_received(:dispatch).with(
+          hash_including(model: 'claude-opus-4-6', request_type: 'structured', schema: schema)
+        )
+      end
+
+      it 'does not call Legion::LLM.structured' do
+        described_class.structured(messages: messages, schema: schema, model: 'claude-opus-4-6', tier: 'fleet')
+        expect(Legion::LLM).not_to have_received(:structured)
+      end
     end
   end
 

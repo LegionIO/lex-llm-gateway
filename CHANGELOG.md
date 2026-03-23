@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.6] - 2026-03-23
+
+### Added
+- Fleet dispatch for structured and embed request types from Inference runner
+- Multi-message chat support in fleet dispatch (passes messages array directly)
+- InferenceRequest message now includes request_type, schema, and text fields
+
+### Changed
+- Fleet.dispatch uses `**opts` for extensible parameter forwarding
+- Fleet.publish_request uses anonymous keyword forwarding
+- Inference extract helpers compacted to single-line ternary style
+
 ## [0.2.5] - 2026-03-23
 
 ### Added

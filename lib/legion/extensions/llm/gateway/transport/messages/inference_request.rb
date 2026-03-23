@@ -29,14 +29,12 @@ module Legion
 
               def message
                 {
-                  model: @options[:model],
-                  messages: @options[:messages] || [],
-                  intent: @options[:intent],
-                  reply_to: @options[:reply_to],
-                  correlation_id: @options[:correlation_id],
-                  signed_token: @options[:signed_token],
-                  provider: @options[:provider],
-                  tier: @options[:tier]
+                  model: @options[:model], messages: @options[:messages] || [],
+                  intent: @options[:intent], reply_to: @options[:reply_to],
+                  correlation_id: @options[:correlation_id], signed_token: @options[:signed_token],
+                  provider: @options[:provider], tier: @options[:tier],
+                  request_type: @options[:request_type], schema: @options[:schema],
+                  text: @options[:text]
                 }
               end
             end

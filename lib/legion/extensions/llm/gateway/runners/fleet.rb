@@ -10,17 +10,19 @@ module Legion
 
             module_function
 
-            def dispatch(model:, messages:, intent: nil, timeout: nil)
+            def dispatch(model:, messages:, **opts)
               return error_result('fleet_unavailable') unless fleet_available?
 
+              intent = opts[:intent]
               token = Helpers::Auth.sign_request({ model: model, intent: intent })
               return error_result('fleet_auth_failed') if token.nil? && require_auth?
 
               correlation_id = Helpers::Rpc.generate_correlation_id
               publish_request(model: model, messages: messages, intent: intent,
-                              correlation_id: correlation_id, signed_token: token)
+                              correlation_id: correlation_id, signed_token: token,
+                              **opts.except(:intent, :timeout))
 
-              wait_for_response(correlation_id, timeout: resolve_timeout(timeout))
+              wait_for_response(correlation_id, timeout: resolve_timeout(opts[:timeout]))
             end
 
             def fleet_available?
@@ -68,12 +70,9 @@ module Legion
               settings.dig(:routing, :fleet, :timeout_seconds) || DEFAULT_TIMEOUT
             end
 
-            def publish_request(model:, messages:, intent:, correlation_id:, signed_token:)
-              reply_to = Helpers::Rpc.agent_queue_name
+            def publish_request(**)
               Transport::Messages::InferenceRequest.new(
-                model: model, messages: messages, intent: intent,
-                reply_to: reply_to, correlation_id: correlation_id,
-                signed_token: signed_token
+                reply_to: Helpers::Rpc.agent_queue_name, **
               ).publish
             end
 

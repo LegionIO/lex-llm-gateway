@@ -19,7 +19,7 @@ module Legion
 
             def embed(text: nil, model: nil, provider: nil, **)
               start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
-              response = call_llm(:embed, text: text, model: model, provider: provider, **)
+              response = dispatch_embed(text: text, model: model, provider: provider, **)
               elapsed_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond) - start_ms
               meter_response(response, request_type: 'embed', provider: provider, model_id: model,
                                        latency_ms: elapsed_ms)
@@ -28,22 +28,42 @@ module Legion
 
             def structured(messages: nil, schema: nil, model: nil, provider: nil, **)
               start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
-              response = call_llm(:structured, messages: messages, schema: schema, model: model,
-                                               provider: provider, **)
+              response = dispatch_structured(messages: messages, schema: schema, model: model,
+                                             provider: provider, **)
               elapsed_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond) - start_ms
               meter_response(response, request_type: 'structured', provider: provider, model_id: model,
                                        latency_ms: elapsed_ms)
               response
             end
 
-            def dispatch_chat(message: nil, model: nil, provider: nil, **opts)
+            def dispatch_chat(message: nil, messages: nil, model: nil, provider: nil, **opts)
               tier = opts[:tier]
               Legion::Logging.debug "[Gateway::Inference] dispatch_chat tier=#{tier}" if defined?(Legion::Logging)
               if tier == 'fleet' && fleet_available?
-                Fleet.dispatch(model: model, messages: [{ role: 'user', content: message }],
-                               intent: opts[:intent])
+                fleet_messages = messages || [{ role: 'user', content: message }]
+                Fleet.dispatch(model: model, messages: fleet_messages, intent: opts[:intent])
               else
-                call_llm(:chat, message: message, model: model, provider: provider, **opts)
+                call_llm(:chat, message: message, messages: messages, model: model,
+                                provider: provider, **opts)
+              end
+            end
+
+            def dispatch_embed(text: nil, model: nil, provider: nil, **opts)
+              if opts[:tier] == 'fleet' && fleet_available?
+                Fleet.dispatch(model: model, messages: [{ role: 'user', content: text }],
+                               intent: opts[:intent], request_type: 'embed', text: text)
+              else
+                call_llm(:embed, text: text, model: model, provider: provider, **opts)
+              end
+            end
+
+            def dispatch_structured(messages: nil, schema: nil, model: nil, provider: nil, **opts)
+              if opts[:tier] == 'fleet' && fleet_available?
+                Fleet.dispatch(model: model, messages: messages, intent: opts[:intent],
+                               request_type: 'structured', schema: schema)
+              else
+                call_llm(:structured, messages: messages, schema: schema, model: model,
+                                      provider: provider, **opts)
               end
             end
 
@@ -91,21 +111,15 @@ module Legion
             end
 
             def extract_tokens(response, field)
-              return 0 unless response.respond_to?(field)
-
-              response.public_send(field).to_i
+              response.respond_to?(field) ? response.public_send(field).to_i : 0
             end
 
             def extract_provider(response, fallback)
-              return response.provider if response.respond_to?(:provider)
-
-              fallback
+              response.respond_to?(:provider) ? response.provider : fallback
             end
 
             def extract_model(response, fallback)
-              return response.model if response.respond_to?(:model)
-
-              fallback
+              response.respond_to?(:model) ? response.model : fallback
             end
           end
         end

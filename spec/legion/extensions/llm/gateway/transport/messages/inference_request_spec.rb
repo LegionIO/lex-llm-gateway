@@ -63,7 +63,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::InferenceR
   describe '#message' do
     it 'returns a hash with all expected keys' do
       result = msg.message
-      expected_keys = %i[model messages intent reply_to correlation_id signed_token provider tier]
+      expected_keys = %i[model messages intent reply_to correlation_id signed_token provider tier request_type schema
+                         text]
       expect(result.keys).to match_array(expected_keys)
     end
 
@@ -93,6 +94,18 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::InferenceR
       expect(msg.message[:signed_token]).to be_nil
       expect(msg.message[:provider]).to be_nil
       expect(msg.message[:tier]).to be_nil
+      expect(msg.message[:request_type]).to be_nil
+      expect(msg.message[:schema]).to be_nil
+      expect(msg.message[:text]).to be_nil
+    end
+
+    it 'includes request_type, schema, and text when provided' do
+      m = described_class.new(**valid_opts, request_type: 'structured',
+                                            schema: { type: 'object' },
+                                            text: 'embed this')
+      expect(m.message[:request_type]).to eq('structured')
+      expect(m.message[:schema]).to eq({ type: 'object' })
+      expect(m.message[:text]).to eq('embed this')
     end
   end
 end
