@@ -9,6 +9,7 @@ module Legion
         extend Legion::Extensions::Core if Legion::Extensions.const_defined?(:Core)
       end
     end
-    Llm = LLM unless const_defined?(:Llm, false)
+    remove_const(:Llm) if const_defined?(:Llm, false)
+    Llm = LLM
   end
 end

@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.12] - 2026-03-24
+
+### Fixed
+- fix `uninitialized constant Legion::Extensions::Llm::Gateway` when `ensure_namespace` pre-creates `Llm` as empty module before gem loads — unconditionally `remove_const(:Llm)` then reassign alias to `LLM`
+
 ## [0.2.11] - 2026-03-23
 
 ### Changed
