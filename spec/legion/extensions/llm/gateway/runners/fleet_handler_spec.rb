@@ -66,7 +66,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
         described_class.handle_fleet_request(payload)
         expect(Legion::LLM).to have_received(:chat).with(
           model: 'claude-opus-4-6',
-          message: 'Hello'
+          message: 'Hello',
+          caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
 
@@ -143,7 +144,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
         described_class.handle_fleet_request(payload)
         expect(Legion::LLM).to have_received(:chat).with(
           model: 'claude-opus-4-6',
-          messages: payload[:messages]
+          messages: payload[:messages],
+          caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
     end
@@ -170,7 +172,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
         expect(Legion::LLM).to have_received(:structured).with(
           model: 'claude-opus-4-6',
           messages: payload[:messages],
-          schema: schema
+          schema: schema,
+          caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
 
@@ -199,7 +202,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
         described_class.handle_fleet_request(payload)
         expect(Legion::LLM).to have_received(:embed).with(
           model: 'text-embedding-3-small',
-          text: 'Embed this sentence.'
+          text: 'Embed this sentence.',
+          caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
 
@@ -228,7 +232,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
         described_class.handle_fleet_request(payload)
         expect(Legion::LLM).to have_received(:embed).with(
           model: 'text-embedding-3-small',
-          text: 'Fallback text'
+          text: 'Fallback text',
+          caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
     end

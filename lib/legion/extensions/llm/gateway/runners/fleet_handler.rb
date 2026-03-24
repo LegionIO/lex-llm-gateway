@@ -48,9 +48,11 @@ module Legion
             def call_chat(payload)
               messages = payload[:messages]
               if messages.is_a?(Array) && messages.size > 1
-                Legion::LLM.chat(model: payload[:model], messages: messages)
+                Legion::LLM.chat(model: payload[:model], messages: messages,
+                                 caller: { extension: 'lex-llm-gateway', operation: 'fleet' })
               else
-                Legion::LLM.chat(model: payload[:model], message: messages&.dig(0, :content))
+                Legion::LLM.chat(model: payload[:model], message: messages&.dig(0, :content),
+                                 caller: { extension: 'lex-llm-gateway', operation: 'fleet' })
               end
             end
 
@@ -58,13 +60,15 @@ module Legion
               Legion::LLM.structured(
                 model: payload[:model],
                 messages: payload[:messages],
-                schema: payload[:schema]
+                schema: payload[:schema],
+                caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
               )
             end
 
             def call_embed(payload)
               text = payload[:text] || payload.dig(:messages, 0, :content)
-              Legion::LLM.embed(model: payload[:model], text: text)
+              Legion::LLM.embed(model: payload[:model], text: text,
+                                caller: { extension: 'lex-llm-gateway', operation: 'fleet' })
             end
 
             def build_response(correlation_id, response)
