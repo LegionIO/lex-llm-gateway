@@ -5,10 +5,15 @@ module Legion
     module LLM
       module Gateway
         module Runners
-          module Inference
+          module Inference # rubocop:disable Metrics/ModuleLength
             module_function
 
             def chat(model: nil, provider: nil, **opts)
+              if pipeline_available?
+                log_deprecation(:chat)
+                return Legion::LLM.chat(model: model, provider: provider, **opts)
+              end
+
               start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
               response = dispatch_chat(model: model, provider: provider, **opts)
               elapsed_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond) - start_ms
@@ -18,6 +23,11 @@ module Legion
             end
 
             def embed(text: nil, model: nil, provider: nil, **)
+              if pipeline_available?
+                log_deprecation(:embed)
+                return Legion::LLM.embed(text, model: model, provider: provider, **)
+              end
+
               start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
               response = dispatch_embed(text: text, model: model, provider: provider, **)
               elapsed_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond) - start_ms
@@ -26,7 +36,13 @@ module Legion
               response
             end
 
-            def structured(messages: nil, schema: nil, model: nil, provider: nil, **)
+            def structured(messages: nil, schema: nil, model: nil, provider: nil, **) # rubocop:disable Metrics/MethodLength
+              if pipeline_available?
+                log_deprecation(:structured)
+                return Legion::LLM.structured(messages: messages, schema: schema, model: model,
+                                              provider: provider, **)
+              end
+
               start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
               response = dispatch_structured(messages: messages, schema: schema, model: model,
                                              provider: provider, **)
@@ -34,6 +50,21 @@ module Legion
               meter_response(response, request_type: 'structured', provider: provider, model_id: model,
                                        latency_ms: elapsed_ms)
               response
+            end
+
+            def pipeline_available?
+              defined?(Legion::LLM::Pipeline::Executor) &&
+                defined?(Legion::LLM) &&
+                Legion::LLM.respond_to?(:pipeline_enabled?) &&
+                Legion::LLM.pipeline_enabled?
+            end
+
+            def log_deprecation(method)
+              return unless defined?(Legion::Logging)
+
+              Legion::Logging.warn(
+                "lex-llm-gateway is deprecated for #{method}, use Legion::LLM.#{method} directly"
+              )
             end
 
             def dispatch_chat(message: nil, messages: nil, model: nil, provider: nil, **opts)
