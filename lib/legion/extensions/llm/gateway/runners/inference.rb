@@ -8,10 +8,11 @@ module Legion
           module Inference # rubocop:disable Metrics/ModuleLength
             module_function
 
-            def chat(model: nil, provider: nil, **opts)
+            def chat(model: nil, provider: nil, **opts) # rubocop:disable Metrics/MethodLength
               if pipeline_available?
                 log_deprecation(:chat)
-                return Legion::LLM.chat(model: model, provider: provider, **opts)
+                return Legion::LLM.chat(model: model, provider: provider,
+                                        caller: { extension: 'lex-llm-gateway', operation: 'inference' }, **opts)
               end
 
               start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
@@ -22,10 +23,11 @@ module Legion
               response
             end
 
-            def embed(text: nil, model: nil, provider: nil, **)
+            def embed(text: nil, model: nil, provider: nil, **) # rubocop:disable Metrics/MethodLength
               if pipeline_available?
                 log_deprecation(:embed)
-                return Legion::LLM.embed(text, model: model, provider: provider, **)
+                return Legion::LLM.embed(text, model: model, provider: provider,
+                                               caller: { extension: 'lex-llm-gateway', operation: 'inference' }, **)
               end
 
               start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
@@ -40,7 +42,8 @@ module Legion
               if pipeline_available?
                 log_deprecation(:structured)
                 return Legion::LLM.structured(messages: messages, schema: schema, model: model,
-                                              provider: provider, **)
+                                              provider: provider,
+                                              caller: { extension: 'lex-llm-gateway', operation: 'inference' }, **)
               end
 
               start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)

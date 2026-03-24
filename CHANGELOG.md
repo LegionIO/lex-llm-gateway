@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.11] - 2026-03-23
+
+### Changed
+- Add `caller:` identity to all `Legion::LLM` call sites: 3 pipeline-path calls in `Runners::Inference` (`chat`, `embed`, `structured`) and 4 fleet worker calls in `Runners::FleetHandler` (`call_chat` ×2, `call_structured`, `call_embed`) with `extension: 'lex-llm-gateway'` and `operation: 'inference'`/`'fleet'`
+
 ## [0.2.10] - 2026-03-23
 
 ### Added
