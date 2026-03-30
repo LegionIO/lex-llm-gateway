@@ -28,9 +28,9 @@ module Legion
               tracker = health_tracker
               providers = known_providers
               {
-                total: providers.size,
-                closed: providers.count { |p| tracker.circuit_state(p) == :closed },
-                open: providers.count { |p| tracker.circuit_state(p) == :open },
+                total:     providers.size,
+                closed:    providers.count { |p| tracker.circuit_state(p) == :closed },
+                open:      providers.count { |p| tracker.circuit_state(p) == :open },
                 half_open: providers.count { |p| tracker.circuit_state(p) == :half_open }
               }
             end
@@ -54,16 +54,16 @@ module Legion
               providers.select { |_, cfg| cfg.is_a?(Hash) && cfg[:enabled] }
                        .keys
                        .map(&:to_sym)
-            rescue StandardError
+            rescue StandardError => _e
               []
             end
 
             def provider_entry(name, tracker)
               {
-                provider: name.to_s,
-                circuit: tracker.circuit_state(name).to_s,
+                provider:   name.to_s,
+                circuit:    tracker.circuit_state(name).to_s,
                 adjustment: tracker.adjustment(name),
-                healthy: tracker.circuit_state(name) != :open
+                healthy:    tracker.circuit_state(name) != :open
               }
             end
 

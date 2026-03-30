@@ -7,18 +7,18 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::MeteringWriter do
   describe '.write_metering_record' do
     let(:payload) do
       {
-        worker_id: 'worker-abc',
-        task_id: 42,
-        provider: 'anthropic',
-        model_id: 'claude-opus-4-6',
-        input_tokens: 100,
-        output_tokens: 50,
+        worker_id:       'worker-abc',
+        task_id:         42,
+        provider:        'anthropic',
+        model_id:        'claude-opus-4-6',
+        input_tokens:    100,
+        output_tokens:   50,
         thinking_tokens: 10,
-        total_tokens: 160,
-        latency_ms: 300,
-        wall_clock_ms: 350,
-        routing_reason: 'cost',
-        recorded_at: nil
+        total_tokens:    160,
+        latency_ms:      300,
+        wall_clock_ms:   350,
+        routing_reason:  'cost',
+        recorded_at:     nil
       }
     end
 
@@ -135,18 +135,18 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::MeteringWriter do
   describe '.normalize_record' do
     let(:payload) do
       {
-        worker_id: 'w-1',
-        task_id: 7,
-        provider: 'openai',
-        model_id: 'gpt-4o',
-        input_tokens: 10,
-        output_tokens: 20,
+        worker_id:       'w-1',
+        task_id:         7,
+        provider:        'openai',
+        model_id:        'gpt-4o',
+        input_tokens:    10,
+        output_tokens:   20,
         thinking_tokens: 0,
-        total_tokens: 30,
-        latency_ms: 200,
-        wall_clock_ms: 250,
-        routing_reason: 'speed',
-        recorded_at: nil
+        total_tokens:    30,
+        latency_ms:      200,
+        wall_clock_ms:   250,
+        routing_reason:  'speed',
+        recorded_at:     nil
       }
     end
 

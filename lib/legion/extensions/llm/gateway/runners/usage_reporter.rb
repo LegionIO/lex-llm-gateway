@@ -55,31 +55,31 @@ module Legion
 
             def build_summary(dataset, period, since)
               queries.aggregate_totals(dataset).merge(
-                period: period.to_s,
-                since: since.iso8601,
+                period:      period.to_s,
+                since:       since.iso8601,
                 by_provider: queries.grouped_rows(dataset, :provider),
-                by_model: queries.grouped_rows(dataset, :model_id)
+                by_model:    queries.grouped_rows(dataset, :model_id)
               )
             end
 
             def build_worker_summary(dataset, worker_id, period, since)
               queries.aggregate_totals(dataset).merge(
                 worker_id: worker_id,
-                period: period.to_s,
-                since: since.iso8601,
-                by_model: queries.grouped_rows(dataset, :model_id)
+                period:    period.to_s,
+                since:     since.iso8601,
+                by_model:  queries.grouped_rows(dataset, :model_id)
               )
             end
 
             def build_budget_result(budget, spent, alert_at, period)
               ratio = budget.positive? ? (spent / budget) : 0.0
               {
-                period: period.to_s,
-                budget: budget.round(2),
-                spent: spent.round(4),
+                period:    period.to_s,
+                budget:    budget.round(2),
+                spent:     spent.round(4),
                 remaining: [(budget - spent), 0.0].max.round(4),
-                ratio: ratio.round(4),
-                status: budget_status(ratio, alert_at)
+                ratio:     ratio.round(4),
+                status:    budget_status(ratio, alert_at)
               }
             end
 

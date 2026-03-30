@@ -10,20 +10,20 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
   describe '.handle_fleet_request' do
     let(:payload) do
       {
-        signed_token: 'valid.jwt.token',
+        signed_token:   'valid.jwt.token',
         correlation_id: 'corr-123',
-        model: 'claude-opus-4-6',
-        messages: [{ role: 'user', content: 'Hello' }]
+        model:          'claude-opus-4-6',
+        messages:       [{ role: 'user', content: 'Hello' }]
       }
     end
 
     let(:llm_response) do
       double('response',
-             input_tokens: 10,
-             output_tokens: 20,
+             input_tokens:    10,
+             output_tokens:   20,
              thinking_tokens: 0,
-             provider: 'anthropic',
-             model: 'claude-opus-4-6')
+             provider:        'anthropic',
+             model:           'claude-opus-4-6')
     end
 
     before do
@@ -65,9 +65,9 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
       it 'calls Legion::LLM.chat with model and message content' do
         described_class.handle_fleet_request(payload)
         expect(Legion::LLM).to have_received(:chat).with(
-          model: 'claude-opus-4-6',
+          model:   'claude-opus-4-6',
           message: 'Hello',
-          caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
+          caller:  { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
 
@@ -92,11 +92,11 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
       context 'with reply_to in payload' do
         let(:payload) do
           {
-            signed_token: 'valid.jwt.token',
+            signed_token:   'valid.jwt.token',
             correlation_id: 'corr-123',
-            model: 'claude-opus-4-6',
-            messages: [{ role: 'user', content: 'Hello' }],
-            reply_to: 'agent.queue.requester'
+            model:          'claude-opus-4-6',
+            messages:       [{ role: 'user', content: 'Hello' }],
+            reply_to:       'agent.queue.requester'
           }
         end
 
@@ -130,10 +130,10 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
     context 'with multi-message chat' do
       let(:payload) do
         {
-          signed_token: 'valid.jwt.token',
+          signed_token:   'valid.jwt.token',
           correlation_id: 'corr-multi',
-          model: 'claude-opus-4-6',
-          messages: [
+          model:          'claude-opus-4-6',
+          messages:       [
             { role: 'system', content: 'You are helpful.' },
             { role: 'user', content: 'Hello' }
           ]
@@ -143,9 +143,9 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
       it 'calls Legion::LLM.chat with messages array' do
         described_class.handle_fleet_request(payload)
         expect(Legion::LLM).to have_received(:chat).with(
-          model: 'claude-opus-4-6',
+          model:    'claude-opus-4-6',
           messages: payload[:messages],
-          caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
+          caller:   { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
     end
@@ -154,12 +154,12 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
       let(:schema) { { type: 'object', properties: { name: { type: 'string' } } } }
       let(:payload) do
         {
-          signed_token: 'valid.jwt.token',
+          signed_token:   'valid.jwt.token',
           correlation_id: 'corr-struct',
-          model: 'claude-opus-4-6',
-          request_type: 'structured',
-          messages: [{ role: 'user', content: 'Extract the name' }],
-          schema: schema
+          model:          'claude-opus-4-6',
+          request_type:   'structured',
+          messages:       [{ role: 'user', content: 'Extract the name' }],
+          schema:         schema
         }
       end
 
@@ -170,10 +170,10 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
       it 'calls Legion::LLM.structured with model, messages, and schema' do
         described_class.handle_fleet_request(payload)
         expect(Legion::LLM).to have_received(:structured).with(
-          model: 'claude-opus-4-6',
+          model:    'claude-opus-4-6',
           messages: payload[:messages],
-          schema: schema,
-          caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
+          schema:   schema,
+          caller:   { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
 
@@ -186,11 +186,11 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
     context 'with embed request type' do
       let(:payload) do
         {
-          signed_token: 'valid.jwt.token',
+          signed_token:   'valid.jwt.token',
           correlation_id: 'corr-embed',
-          model: 'text-embedding-3-small',
-          request_type: 'embed',
-          text: 'Embed this sentence.'
+          model:          'text-embedding-3-small',
+          request_type:   'embed',
+          text:           'Embed this sentence.'
         }
       end
 
@@ -201,8 +201,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
       it 'calls Legion::LLM.embed with model and text' do
         described_class.handle_fleet_request(payload)
         expect(Legion::LLM).to have_received(:embed).with(
-          model: 'text-embedding-3-small',
-          text: 'Embed this sentence.',
+          model:  'text-embedding-3-small',
+          text:   'Embed this sentence.',
           caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
@@ -216,11 +216,11 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
     context 'with embed request type falling back to messages' do
       let(:payload) do
         {
-          signed_token: 'valid.jwt.token',
+          signed_token:   'valid.jwt.token',
           correlation_id: 'corr-embed-fb',
-          model: 'text-embedding-3-small',
-          request_type: 'embed',
-          messages: [{ role: 'user', content: 'Fallback text' }]
+          model:          'text-embedding-3-small',
+          request_type:   'embed',
+          messages:       [{ role: 'user', content: 'Fallback text' }]
         }
       end
 
@@ -231,8 +231,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
       it 'extracts text from messages when text key is absent' do
         described_class.handle_fleet_request(payload)
         expect(Legion::LLM).to have_received(:embed).with(
-          model: 'text-embedding-3-small',
-          text: 'Fallback text',
+          model:  'text-embedding-3-small',
+          text:   'Fallback text',
           caller: { extension: 'lex-llm-gateway', operation: 'fleet' }
         )
       end
@@ -274,11 +274,11 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
   describe '.build_response' do
     let(:response) do
       double('response',
-             input_tokens: 5,
-             output_tokens: 15,
+             input_tokens:    5,
+             output_tokens:   15,
              thinking_tokens: 2,
-             provider: 'openai',
-             model: 'gpt-4o')
+             provider:        'openai',
+             model:           'gpt-4o')
     end
 
     it 'includes all expected keys' do

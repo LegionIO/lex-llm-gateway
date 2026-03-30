@@ -30,7 +30,7 @@ module Legion
             end
 
             def transport_ready?
-              !!(defined?(Legion::Transport) &&
+              !!(defined?(Legion::Transport) && # rubocop:disable Legion/HelperMigration/DefinedTransportGuard
                  Legion::Transport.respond_to?(:connected?) &&
                  Legion::Transport.connected?)
             end
@@ -80,7 +80,7 @@ module Legion
               future = Helpers::ReplyDispatcher.register(correlation_id)
               result = future.value!(timeout)
               result || timeout_result(correlation_id, timeout)
-            rescue Concurrent::CancelledOperationError
+            rescue Concurrent::CancelledOperationError => _e
               timeout_result(correlation_id, timeout)
             ensure
               Helpers::ReplyDispatcher.deregister(correlation_id)

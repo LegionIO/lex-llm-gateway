@@ -34,35 +34,35 @@ module Legion
 
               def identity_fields
                 {
-                  node_id: @options[:node_id],
-                  worker_id: @options[:worker_id],
-                  agent_id: @options[:agent_id],
+                  node_id:      @options[:node_id],
+                  worker_id:    @options[:worker_id],
+                  agent_id:     @options[:agent_id],
                   request_type: @options[:request_type],
-                  tier: @options[:tier],
-                  provider: @options[:provider],
-                  model_id: @options[:model_id]
+                  tier:         @options[:tier],
+                  provider:     @options[:provider],
+                  model_id:     @options[:model_id]
                 }
               end
 
               def context_fields
                 {
                   routing_reason: @options[:routing_reason],
-                  recorded_at: @options[:recorded_at] || Time.now.utc.iso8601
+                  recorded_at:    @options[:recorded_at] || Time.now.utc.iso8601
                 }
               end
 
               def token_fields
                 {
-                  input_tokens: @options[:input_tokens] || 0,
-                  output_tokens: @options[:output_tokens] || 0,
+                  input_tokens:    @options[:input_tokens] || 0,
+                  output_tokens:   @options[:output_tokens] || 0,
                   thinking_tokens: @options[:thinking_tokens] || 0,
-                  total_tokens: @options[:total_tokens] || 0
+                  total_tokens:    @options[:total_tokens] || 0
                 }
               end
 
               def timing_fields
                 {
-                  latency_ms: @options[:latency_ms] || 0,
+                  latency_ms:    @options[:latency_ms] || 0,
                   wall_clock_ms: @options[:wall_clock_ms] || 0
                 }
               end

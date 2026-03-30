@@ -7,7 +7,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::ProviderStats do
   let(:tracker) do
     instance_double('HealthTracker',
                     circuit_state: :closed,
-                    adjustment: 0)
+                    adjustment:    0)
   end
 
   before do

@@ -13,7 +13,7 @@ module Legion
 
               def queue_options
                 {
-                  durable: true,
+                  durable:     true,
                   auto_delete: false
                 }
               end

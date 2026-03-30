@@ -33,39 +33,39 @@ module Legion
 
             def identity_fields(payload)
               {
-                worker_id: payload[:worker_id],
-                task_id: payload[:task_id],
-                provider: payload[:provider],
-                model_id: payload[:model_id],
+                worker_id:      payload[:worker_id],
+                task_id:        payload[:task_id],
+                provider:       payload[:provider],
+                model_id:       payload[:model_id],
                 routing_reason: payload[:routing_reason],
-                recorded_at: payload[:recorded_at] || Time.now.utc
+                recorded_at:    payload[:recorded_at] || Time.now.utc
               }
             end
 
             def trace_fields(payload)
               {
-                status: payload[:status],
-                event_type: payload[:event_type],
-                extension: payload[:extension],
+                status:          payload[:status],
+                event_type:      payload[:event_type],
+                extension:       payload[:extension],
                 runner_function: payload[:runner_function]
               }
             end
 
             def metric_fields(payload)
               {
-                input_tokens: payload[:input_tokens].to_i,
-                output_tokens: payload[:output_tokens].to_i,
+                input_tokens:    payload[:input_tokens].to_i,
+                output_tokens:   payload[:output_tokens].to_i,
                 thinking_tokens: payload[:thinking_tokens].to_i,
-                total_tokens: payload[:total_tokens].to_i,
-                latency_ms: payload[:latency_ms].to_i,
-                wall_clock_ms: payload[:wall_clock_ms].to_i
+                total_tokens:    payload[:total_tokens].to_i,
+                latency_ms:      payload[:latency_ms].to_i,
+                wall_clock_ms:   payload[:wall_clock_ms].to_i
               }
             end
 
             def cost_field(payload)
               cost = payload[:cost_usd] || Helpers::CostEstimator.estimate(
-                model_id: payload[:model_id],
-                input_tokens: payload[:input_tokens].to_i,
+                model_id:      payload[:model_id],
+                input_tokens:  payload[:input_tokens].to_i,
                 output_tokens: payload[:output_tokens].to_i
               )
               { cost_usd: cost.to_f }
