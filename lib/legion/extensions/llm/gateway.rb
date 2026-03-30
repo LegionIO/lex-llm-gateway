@@ -6,7 +6,7 @@ module Legion
   module Extensions
     module LLM
       module Gateway
-        extend Legion::Extensions::Core if Legion::Extensions.const_defined?(:Core)
+        extend Legion::Extensions::Core if Legion::Extensions.const_defined?(:Core, false)
       end
     end
     remove_const(:Llm) if const_defined?(:Llm, false)

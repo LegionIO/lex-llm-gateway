@@ -101,8 +101,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::InferenceR
 
     it 'includes request_type, schema, and text when provided' do
       m = described_class.new(**valid_opts, request_type: 'structured',
-                                            schema: { type: 'object' },
-                                            text: 'embed this')
+                                            schema:       { type: 'object' },
+                                            text:         'embed this')
       expect(m.message[:request_type]).to eq('structured')
       expect(m.message[:schema]).to eq({ type: 'object' })
       expect(m.message[:text]).to eq('embed this')

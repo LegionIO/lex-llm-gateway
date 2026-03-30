@@ -20,8 +20,8 @@ module Legion
               {
                 total_requests: dataset.count,
                 total_cost_usd: dataset.sum(:cost_usd).to_f.round(4),
-                total_input: dataset.sum(:input_tokens).to_i,
-                total_output: dataset.sum(:output_tokens).to_i
+                total_input:    dataset.sum(:input_tokens).to_i,
+                total_output:   dataset.sum(:output_tokens).to_i
               }
             end
 

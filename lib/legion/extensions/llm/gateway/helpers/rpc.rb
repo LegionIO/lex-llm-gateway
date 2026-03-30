@@ -15,16 +15,14 @@ module Legion
             end
 
             def agent_queue_name
-              if defined?(Legion::Transport) && Legion::Transport.respond_to?(:agent_queue_name)
-                return Legion::Transport.agent_queue_name
-              end
+              return Legion::Transport.agent_queue_name if defined?(Legion::Transport) && Legion::Transport.respond_to?(:agent_queue_name) # rubocop:disable Legion/HelperMigration/DefinedTransportGuard
 
               nil
             end
 
             def build_reply_headers(correlation_id:)
               {
-                reply_to: agent_queue_name,
+                reply_to:       agent_queue_name,
                 correlation_id: correlation_id
               }
             end

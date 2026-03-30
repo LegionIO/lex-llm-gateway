@@ -11,11 +11,11 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Client do
 
   let(:response_double) do
     double('response',
-           input_tokens: 100,
-           output_tokens: 50,
+           input_tokens:    100,
+           output_tokens:   50,
            thinking_tokens: 0,
-           provider: 'anthropic',
-           model: 'claude-opus-4-6')
+           provider:        'anthropic',
+           model:           'claude-opus-4-6')
   end
 
   describe '#initialize' do

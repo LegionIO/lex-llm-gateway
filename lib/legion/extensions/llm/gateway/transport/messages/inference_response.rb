@@ -28,10 +28,10 @@ module Legion
               def message
                 token_fields.merge(
                   correlation_id: @options[:correlation_id],
-                  response: @options[:response],
-                  provider: @options[:provider],
-                  model_id: @options[:model_id],
-                  error: @options[:error]
+                  response:       @options[:response],
+                  provider:       @options[:provider],
+                  model_id:       @options[:model_id],
+                  error:          @options[:error]
                 )
               end
 
@@ -39,10 +39,10 @@ module Legion
 
               def token_fields
                 {
-                  input_tokens: @options[:input_tokens] || 0,
-                  output_tokens: @options[:output_tokens] || 0,
+                  input_tokens:    @options[:input_tokens] || 0,
+                  output_tokens:   @options[:output_tokens] || 0,
                   thinking_tokens: @options[:thinking_tokens] || 0,
-                  latency_ms: @options[:latency_ms] || 0
+                  latency_ms:      @options[:latency_ms] || 0
                 }
               end
             end

@@ -5,13 +5,13 @@ module Legion
     module LLM
       module Gateway
         module Runners
-          module Inference # rubocop:disable Metrics/ModuleLength
+          module Inference
             module_function
 
-            def chat(model: nil, provider: nil, **opts) # rubocop:disable Metrics/MethodLength
+            def chat(model: nil, provider: nil, **opts)
               if pipeline_available?
                 log_deprecation(:chat)
-                return Legion::LLM.chat(model: model, provider: provider,
+                return Legion::LLM.chat(model: model, provider: provider, # rubocop:disable Legion/HelperMigration/DirectLlm
                                         caller: { extension: 'lex-llm-gateway', operation: 'inference' }, **opts)
               end
 
@@ -23,11 +23,11 @@ module Legion
               response
             end
 
-            def embed(text: nil, model: nil, provider: nil, **) # rubocop:disable Metrics/MethodLength
+            def embed(text: nil, model: nil, provider: nil, **)
               if pipeline_available?
                 log_deprecation(:embed)
-                return Legion::LLM.embed(text, model: model, provider: provider,
-                                               caller: { extension: 'lex-llm-gateway', operation: 'inference' }, **)
+                return Legion::LLM.embed(text, model: model, provider: provider, # rubocop:disable Legion/HelperMigration/DirectLlm
+                                         caller: { extension: 'lex-llm-gateway', operation: 'inference' }, **)
               end
 
               start_ms = ::Process.clock_gettime(::Process::CLOCK_MONOTONIC, :millisecond)
@@ -38,10 +38,10 @@ module Legion
               response
             end
 
-            def structured(messages: nil, schema: nil, model: nil, provider: nil, **) # rubocop:disable Metrics/MethodLength
+            def structured(messages: nil, schema: nil, model: nil, provider: nil, **)
               if pipeline_available?
                 log_deprecation(:structured)
-                return Legion::LLM.structured(messages: messages, schema: schema, model: model,
+                return Legion::LLM.structured(messages: messages, schema: schema, model: model, # rubocop:disable Legion/HelperMigration/DirectLlm
                                               provider: provider,
                                               caller: { extension: 'lex-llm-gateway', operation: 'inference' }, **)
               end
@@ -63,16 +63,14 @@ module Legion
             end
 
             def log_deprecation(method)
-              return unless defined?(Legion::Logging)
+              return unless defined?(Legion::Logging) # rubocop:disable Legion/HelperMigration/LoggingGuard
 
-              Legion::Logging.warn(
-                "lex-llm-gateway is deprecated for #{method}, use Legion::LLM.#{method} directly"
-              )
+              Legion::Logging.warn("lex-llm-gateway is deprecated for #{method}, use Legion::LLM.#{method} directly") # rubocop:disable Legion/HelperMigration/DirectLogging
             end
 
             def dispatch_chat(message: nil, messages: nil, model: nil, provider: nil, **opts)
               tier = opts[:tier]
-              Legion::Logging.debug "[Gateway::Inference] dispatch_chat tier=#{tier}" if defined?(Legion::Logging)
+              Legion::Logging.debug("[Gateway::Inference] dispatch_chat tier=#{tier}") if defined?(Legion::Logging) # rubocop:disable Legion/HelperMigration/DirectLogging, Legion/HelperMigration/LoggingGuard
               if tier == 'fleet' && fleet_available?
                 fleet_messages = messages || [{ role: 'user', content: message }]
                 Fleet.dispatch(model: model, messages: fleet_messages, intent: opts[:intent])
@@ -108,7 +106,7 @@ module Legion
 
             def call_llm(method_name, **)
               unless defined?(Legion::LLM)
-                Legion::Logging.warn '[Gateway::Inference] Legion::LLM not defined' if defined?(Legion::Logging)
+                Legion::Logging.warn('[Gateway::Inference] Legion::LLM not defined') if defined?(Legion::Logging) # rubocop:disable Legion/HelperMigration/DirectLogging, Legion/HelperMigration/LoggingGuard
                 return { error: 'llm_not_available' }
               end
 
@@ -127,19 +125,19 @@ module Legion
 
             def base_meter_fields(response, opts)
               {
-                request_type: opts[:request_type],
-                provider: extract_provider(response, opts[:provider]),
-                model_id: extract_model(response, opts[:model_id]),
-                latency_ms: opts[:latency_ms],
-                tier: opts[:tier],
+                request_type:   opts[:request_type],
+                provider:       extract_provider(response, opts[:provider]),
+                model_id:       extract_model(response, opts[:model_id]),
+                latency_ms:     opts[:latency_ms],
+                tier:           opts[:tier],
                 routing_reason: opts[:intent]
               }
             end
 
             def token_fields(response)
               {
-                input_tokens: extract_tokens(response, :input_tokens),
-                output_tokens: extract_tokens(response, :output_tokens),
+                input_tokens:    extract_tokens(response, :input_tokens),
+                output_tokens:   extract_tokens(response, :output_tokens),
                 thinking_tokens: extract_tokens(response, :thinking_tokens)
               }
             end

@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.13] - 2026-03-30
+
+### Changed
+- Add rubocop-legion 0.1.7 shared config via `inherit_gem`
+- Replace all `log.*` calls in `module_function` modules with `Legion::Logging.*` and inline disable comments
+- Replace `llm_chat`/`llm_embed`/`llm_structured` helper calls with `Legion::LLM.*` direct calls in `module_function` contexts
+- Update CI workflow: rename `lint` job to `excluded-files`, update workflow ref to `excluded-files.yml@main`
+
 ## [0.2.12] - 2026-03-24
 
 ### Fixed

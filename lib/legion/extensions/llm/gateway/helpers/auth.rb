@@ -12,7 +12,7 @@ module Legion
               return nil unless defined?(Legion::Crypt::JWT)
 
               Legion::Crypt::JWT.encode(payload: payload, ttl: 60)
-            rescue StandardError
+            rescue StandardError => _e
               nil
             end
 
@@ -20,7 +20,7 @@ module Legion
               return nil unless defined?(Legion::Crypt::JWT)
 
               Legion::Crypt::JWT.decode(token: token)
-            rescue StandardError
+            rescue StandardError => _e
               nil
             end
           end

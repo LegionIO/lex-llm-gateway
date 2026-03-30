@@ -14,13 +14,13 @@ module Legion
 
             def identity_fields(opts)
               {
-                node_id: opts[:node_id],
-                worker_id: opts[:worker_id],
-                agent_id: opts[:agent_id],
+                node_id:      opts[:node_id],
+                worker_id:    opts[:worker_id],
+                agent_id:     opts[:agent_id],
                 request_type: opts[:request_type],
-                tier: opts[:tier],
-                provider: opts[:provider],
-                model_id: opts[:model_id]
+                tier:         opts[:tier],
+                provider:     opts[:provider],
+                model_id:     opts[:model_id]
               }
             end
 
@@ -34,10 +34,10 @@ module Legion
 
             def timing_and_context(opts)
               {
-                latency_ms: opts.fetch(:latency_ms, 0),
-                wall_clock_ms: opts.fetch(:wall_clock_ms, 0),
+                latency_ms:     opts.fetch(:latency_ms, 0),
+                wall_clock_ms:  opts.fetch(:wall_clock_ms, 0),
                 routing_reason: opts[:routing_reason],
-                recorded_at: Time.now.utc.iso8601
+                recorded_at:    Time.now.utc.iso8601
               }
             end
 
@@ -61,7 +61,7 @@ module Legion
             end
 
             def transport_connected?
-              !!(defined?(Legion::Transport) &&
+              !!(defined?(Legion::Transport) && # rubocop:disable Legion/HelperMigration/DefinedTransportGuard
                 Legion::Transport.respond_to?(:connected?) &&
                 Legion::Transport.connected?)
             end

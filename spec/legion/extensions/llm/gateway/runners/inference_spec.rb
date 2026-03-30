@@ -7,11 +7,11 @@ require 'legion/extensions/llm/gateway/runners/inference'
 RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
   let(:response) do
     double('response',
-           input_tokens: 100,
-           output_tokens: 50,
+           input_tokens:    100,
+           output_tokens:   50,
            thinking_tokens: 10,
-           provider: 'anthropic',
-           model: 'claude-opus-4-6')
+           provider:        'anthropic',
+           model:           'claude-opus-4-6')
   end
 
   before do
@@ -195,23 +195,23 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
       described_class.meter_response(
         response,
         request_type: 'chat',
-        provider: 'anthropic',
-        model_id: 'claude-opus-4-6',
-        latency_ms: 250,
-        tier: 'cloud',
-        intent: 'summarize'
+        provider:     'anthropic',
+        model_id:     'claude-opus-4-6',
+        latency_ms:   250,
+        tier:         'cloud',
+        intent:       'summarize'
       )
       expect(Legion::Extensions::LLM::Gateway::Runners::Metering).to have_received(:build_event).with(
         hash_including(
-          request_type: 'chat',
-          provider: 'anthropic',
-          model_id: 'claude-opus-4-6',
-          input_tokens: 100,
-          output_tokens: 50,
+          request_type:    'chat',
+          provider:        'anthropic',
+          model_id:        'claude-opus-4-6',
+          input_tokens:    100,
+          output_tokens:   50,
           thinking_tokens: 10,
-          latency_ms: 250,
-          tier: 'cloud',
-          routing_reason: 'summarize'
+          latency_ms:      250,
+          tier:            'cloud',
+          routing_reason:  'summarize'
         )
       )
     end
