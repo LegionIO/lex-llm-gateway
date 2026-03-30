@@ -92,13 +92,16 @@ module Legion
                         end
 
               channel = Legion::Transport.connection.create_channel
-              channel.default_exchange.publish(
-                payload,
-                routing_key:    reply_to,
-                correlation_id: correlation_id,
-                content_type:   'application/json'
-              )
-              channel.close
+              begin
+                channel.default_exchange.publish(
+                  payload,
+                  routing_key:    reply_to,
+                  correlation_id: correlation_id,
+                  content_type:   'application/json'
+                )
+              ensure
+                channel&.close
+              end
             rescue StandardError => e
               Legion::Logging.warn("FleetHandler: publish_reply failed: #{e.message}") if defined?(Legion::Logging) # rubocop:disable Legion/HelperMigration/DirectLogging, Legion/HelperMigration/LoggingGuard
             end
