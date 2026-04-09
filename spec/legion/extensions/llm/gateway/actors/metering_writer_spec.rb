@@ -16,12 +16,12 @@ $LOADED_FEATURES << 'legion/extensions/actors/subscription'
 
 require 'legion/extensions/llm/gateway/actors/metering_writer'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Actor::MeteringWriter do
+RSpec.describe Legion::Extensions::Llm::Gateway::Actor::MeteringWriter do
   subject(:actor) { described_class.allocate }
 
   describe '#runner_class' do
     it 'returns the metering writer runner class string' do
-      expect(actor.runner_class).to eq('Legion::Extensions::LLM::Gateway::Runners::MeteringWriter')
+      expect(actor.runner_class).to eq('Legion::Extensions::Llm::Gateway::Runners::MeteringWriter')
     end
   end
 

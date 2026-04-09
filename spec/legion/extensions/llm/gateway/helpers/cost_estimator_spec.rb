@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'legion/extensions/llm/gateway/helpers/cost_estimator'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Helpers::CostEstimator do
+RSpec.describe Legion::Extensions::Llm::Gateway::Helpers::CostEstimator do
   describe '.estimate' do
     it 'calculates cost for Claude Opus 4.6' do
       cost = described_class.estimate(model_id: 'claude-opus-4-6', input_tokens: 1000, output_tokens: 500)

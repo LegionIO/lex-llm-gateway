@@ -2,7 +2,7 @@
 
 module Legion
   module Extensions
-    module LLM
+    module Llm
       module Gateway
         module Runners
           module Metering
@@ -56,7 +56,7 @@ module Legion
             def flush_spool
               return 0 unless spool_available? && transport_connected?
 
-              spool = Legion::Data::Spool.for(Legion::Extensions::LLM::Gateway)
+              spool = Legion::Data::Spool.for(Legion::Extensions::Llm::Gateway)
               spool.flush(:metering) { |event| publish_event(event) }
             end
 
@@ -71,11 +71,11 @@ module Legion
             end
 
             def publish_event(event)
-              Legion::Extensions::LLM::Gateway::Transport::Messages::MeteringEvent.new(**event).publish
+              Legion::Extensions::Llm::Gateway::Transport::Messages::MeteringEvent.new(**event).publish
             end
 
             def spool_event(event)
-              spool = Legion::Data::Spool.for(Legion::Extensions::LLM::Gateway)
+              spool = Legion::Data::Spool.for(Legion::Extensions::Llm::Gateway)
               spool.write(:metering, event)
             end
           end

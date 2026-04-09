@@ -6,8 +6,8 @@ require 'legion/extensions/llm/gateway/runners/usage_reporter'
 require 'legion/extensions/llm/gateway/runners/metering_writer'
 require 'legion/extensions/llm/gateway/helpers/usage_queries'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Runners::UsageReporter do
-  let(:queries) { Legion::Extensions::LLM::Gateway::Helpers::UsageQueries }
+RSpec.describe Legion::Extensions::Llm::Gateway::Runners::UsageReporter do
+  let(:queries) { Legion::Extensions::Llm::Gateway::Helpers::UsageQueries }
   let(:now) { Time.now.utc }
 
   before(:all) do

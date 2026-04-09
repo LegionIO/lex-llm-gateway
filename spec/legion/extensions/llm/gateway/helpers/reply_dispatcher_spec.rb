@@ -5,7 +5,7 @@ require 'concurrent'
 require 'legion/extensions/llm/gateway/helpers/rpc'
 require 'legion/extensions/llm/gateway/helpers/reply_dispatcher'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Helpers::ReplyDispatcher do
+RSpec.describe Legion::Extensions::Llm::Gateway::Helpers::ReplyDispatcher do
   before { described_class.reset! }
 
   after { described_class.reset! }

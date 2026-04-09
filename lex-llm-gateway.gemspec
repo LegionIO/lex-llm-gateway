@@ -6,11 +6,11 @@ require 'legion/extensions/llm/gateway/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'lex-llm-gateway'
-  spec.version       = Legion::Extensions::LLM::Gateway::VERSION
+  spec.version       = Legion::Extensions::Llm::Gateway::VERSION
   spec.authors       = ['Esity']
   spec.email         = ['matthewdiverson@gmail.com']
 
-  spec.summary       = 'Legion::Extensions::LLM::Gateway'
+  spec.summary       = 'Legion::Extensions::Llm::Gateway'
   spec.description   = 'LLM inference gateway: metering over RabbitMQ, fleet RPC dispatch, local disk spool'
   spec.homepage      = 'https://github.com/LegionIO/lex-llm-gateway'
   spec.license       = 'MIT'

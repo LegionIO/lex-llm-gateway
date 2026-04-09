@@ -21,11 +21,11 @@ require 'legion/extensions/llm/gateway/helpers/reply_dispatcher'
 require 'legion/extensions/llm/gateway/transport/messages/inference_request'
 require 'legion/extensions/llm/gateway/runners/fleet'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Fleet do
-  let(:auth_helper) { Legion::Extensions::LLM::Gateway::Helpers::Auth }
-  let(:rpc_helper) { Legion::Extensions::LLM::Gateway::Helpers::Rpc }
+RSpec.describe Legion::Extensions::Llm::Gateway::Runners::Fleet do
+  let(:auth_helper) { Legion::Extensions::Llm::Gateway::Helpers::Auth }
+  let(:rpc_helper) { Legion::Extensions::Llm::Gateway::Helpers::Rpc }
   let(:inference_request_class) do
-    Legion::Extensions::LLM::Gateway::Transport::Messages::InferenceRequest
+    Legion::Extensions::Llm::Gateway::Transport::Messages::InferenceRequest
   end
 
   let(:message_double) { double('InferenceRequest', publish: nil) }
@@ -272,7 +272,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Fleet do
   end
 
   describe '.wait_for_response' do
-    let(:dispatcher) { Legion::Extensions::LLM::Gateway::Helpers::ReplyDispatcher }
+    let(:dispatcher) { Legion::Extensions::Llm::Gateway::Helpers::ReplyDispatcher }
 
     before { dispatcher.reset! }
 

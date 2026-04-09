@@ -2,7 +2,7 @@
 
 module Legion
   module Extensions
-    module LLM
+    module Llm
       module Gateway
         module Runners
           module ProviderStats

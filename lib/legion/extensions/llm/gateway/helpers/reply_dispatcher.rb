@@ -4,7 +4,7 @@ require 'concurrent'
 
 module Legion
   module Extensions
-    module LLM
+    module Llm
       module Gateway
         module Helpers
           module ReplyDispatcher

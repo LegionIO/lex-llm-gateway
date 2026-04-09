@@ -2,12 +2,12 @@
 
 module Legion
   module Extensions
-    module LLM
+    module Llm
       module Gateway
         module Actor
           class InferenceWorker < Legion::Extensions::Actors::Subscription
             def runner_class
-              'Legion::Extensions::LLM::Gateway::Runners::FleetHandler'
+              'Legion::Extensions::Llm::Gateway::Runners::FleetHandler'
             end
 
             def runner_function

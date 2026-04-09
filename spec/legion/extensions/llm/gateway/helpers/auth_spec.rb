@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'legion/extensions/llm/gateway/helpers/auth'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Helpers::Auth do
+RSpec.describe Legion::Extensions::Llm::Gateway::Helpers::Auth do
   describe '.sign_request' do
     context 'when Legion::Crypt::JWT is not defined' do
       it 'returns nil' do

@@ -2,12 +2,12 @@
 
 module Legion
   module Extensions
-    module LLM
+    module Llm
       module Gateway
         module Actor
           class SpoolFlush < Legion::Extensions::Actors::Every # rubocop:disable Legion/Extension/EveryActorRequiresTime
             def runner_class
-              'Legion::Extensions::LLM::Gateway::Runners::Metering'
+              'Legion::Extensions::Llm::Gateway::Runners::Metering'
             end
 
             def runner_function

@@ -4,8 +4,8 @@ require 'spec_helper'
 require 'legion/extensions/llm/gateway/helpers/auth'
 require 'legion/extensions/llm/gateway/runners/fleet_handler'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Runners::FleetHandler do
-  let(:auth_helper) { Legion::Extensions::LLM::Gateway::Helpers::Auth }
+RSpec.describe Legion::Extensions::Llm::Gateway::Runners::FleetHandler do
+  let(:auth_helper) { Legion::Extensions::Llm::Gateway::Helpers::Auth }
 
   describe '.handle_fleet_request' do
     let(:payload) do

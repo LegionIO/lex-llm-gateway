@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'legion/extensions/llm/gateway/runners/metering'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Metering do
+RSpec.describe Legion::Extensions::Llm::Gateway::Runners::Metering do
   describe '.build_event' do
     it 'returns a hash with all expected keys' do
       result = described_class.build_event(request_type: 'completion', provider: 'openai')
@@ -146,7 +146,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Metering do
 
       it 'calls Spool.for with the gateway module' do
         described_class.flush_spool
-        expect(Legion::Data::Spool).to have_received(:for).with(Legion::Extensions::LLM::Gateway)
+        expect(Legion::Data::Spool).to have_received(:for).with(Legion::Extensions::Llm::Gateway)
       end
 
       it 'publishes each flushed event' do
@@ -219,7 +219,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Metering do
     before do
       metering_event_class = double('MeteringEventClass')
       stub_const(
-        'Legion::Extensions::LLM::Gateway::Transport::Messages::MeteringEvent',
+        'Legion::Extensions::Llm::Gateway::Transport::Messages::MeteringEvent',
         metering_event_class
       )
       allow(metering_event_class).to receive(:new).with(**event).and_return(message_double)

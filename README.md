@@ -1,5 +1,7 @@
 # lex-llm-gateway
 
+**Version**: 0.2.13 | **License**: MIT | **Ruby**: >= 3.4
+
 LLM inference gateway for [LegionIO](https://github.com/LegionIO/LegionIO). Provides centralized metering over RabbitMQ, fleet RPC dispatch to GPU workers, and local disk spooling for offline resilience.
 
 ## Installation

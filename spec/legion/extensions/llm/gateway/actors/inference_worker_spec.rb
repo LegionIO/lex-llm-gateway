@@ -16,12 +16,12 @@ $LOADED_FEATURES << 'legion/extensions/actors/subscription'
 
 require 'legion/extensions/llm/gateway/actors/inference_worker'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Actor::InferenceWorker do
+RSpec.describe Legion::Extensions::Llm::Gateway::Actor::InferenceWorker do
   subject(:actor) { described_class.allocate }
 
   describe '#runner_class' do
     it 'returns the inference runner class string' do
-      expect(actor.runner_class).to eq('Legion::Extensions::LLM::Gateway::Runners::FleetHandler')
+      expect(actor.runner_class).to eq('Legion::Extensions::Llm::Gateway::Runners::FleetHandler')
     end
   end
 

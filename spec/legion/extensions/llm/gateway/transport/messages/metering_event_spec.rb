@@ -16,7 +16,7 @@ end
 
 require 'legion/extensions/llm/gateway/transport/messages/metering_event'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::MeteringEvent do
+RSpec.describe Legion::Extensions::Llm::Gateway::Transport::Messages::MeteringEvent do
   let(:valid_opts) do
     { request_type: 'completion', provider: 'openai' }
   end

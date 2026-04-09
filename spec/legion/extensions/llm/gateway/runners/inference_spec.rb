@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'legion/extensions/llm/gateway/runners/metering'
 require 'legion/extensions/llm/gateway/runners/inference'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
+RSpec.describe Legion::Extensions::Llm::Gateway::Runners::Inference do
   let(:response) do
     double('response',
            input_tokens:    100,
@@ -20,8 +20,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
     allow(Legion::LLM).to receive(:embed).and_return(response)
     allow(Legion::LLM).to receive(:structured).and_return(response)
 
-    allow(Legion::Extensions::LLM::Gateway::Runners::Metering).to receive(:build_event).and_return({})
-    allow(Legion::Extensions::LLM::Gateway::Runners::Metering).to receive(:publish_or_spool)
+    allow(Legion::Extensions::Llm::Gateway::Runners::Metering).to receive(:build_event).and_return({})
+    allow(Legion::Extensions::Llm::Gateway::Runners::Metering).to receive(:publish_or_spool)
   end
 
   describe '.chat' do
@@ -37,12 +37,12 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
 
     it 'calls Metering.publish_or_spool with a metering event' do
       described_class.chat(message: 'hello', model: 'claude-opus-4-6', provider: 'anthropic')
-      expect(Legion::Extensions::LLM::Gateway::Runners::Metering).to have_received(:publish_or_spool)
+      expect(Legion::Extensions::Llm::Gateway::Runners::Metering).to have_received(:publish_or_spool)
     end
 
     it 'calls Metering.build_event with request_type chat' do
       described_class.chat(message: 'hello', model: 'claude-opus-4-6', provider: 'anthropic')
-      expect(Legion::Extensions::LLM::Gateway::Runners::Metering)
+      expect(Legion::Extensions::Llm::Gateway::Runners::Metering)
         .to have_received(:build_event).with(hash_including(request_type: 'chat'))
     end
 
@@ -50,7 +50,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
       let(:fleet_double) { double('Fleet', fleet_available?: true) }
 
       before do
-        stub_const('Legion::Extensions::LLM::Gateway::Runners::Fleet', fleet_double)
+        stub_const('Legion::Extensions::Llm::Gateway::Runners::Fleet', fleet_double)
         allow(fleet_double).to receive(:dispatch).and_return(response)
       end
 
@@ -96,12 +96,12 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
 
     it 'meters the call via publish_or_spool' do
       described_class.embed(text: 'some text', model: 'embed-model', provider: 'openai')
-      expect(Legion::Extensions::LLM::Gateway::Runners::Metering).to have_received(:publish_or_spool)
+      expect(Legion::Extensions::Llm::Gateway::Runners::Metering).to have_received(:publish_or_spool)
     end
 
     it 'calls Metering.build_event with request_type embed' do
       described_class.embed(text: 'some text', model: 'embed-model', provider: 'openai')
-      expect(Legion::Extensions::LLM::Gateway::Runners::Metering)
+      expect(Legion::Extensions::Llm::Gateway::Runners::Metering)
         .to have_received(:build_event).with(hash_including(request_type: 'embed'))
     end
 
@@ -109,7 +109,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
       let(:fleet_double) { double('Fleet', fleet_available?: true) }
 
       before do
-        stub_const('Legion::Extensions::LLM::Gateway::Runners::Fleet', fleet_double)
+        stub_const('Legion::Extensions::Llm::Gateway::Runners::Fleet', fleet_double)
         allow(fleet_double).to receive(:dispatch).and_return(response)
       end
 
@@ -143,12 +143,12 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
 
     it 'meters the call via publish_or_spool' do
       described_class.structured(messages: messages, schema: schema, model: 'claude-opus-4-6')
-      expect(Legion::Extensions::LLM::Gateway::Runners::Metering).to have_received(:publish_or_spool)
+      expect(Legion::Extensions::Llm::Gateway::Runners::Metering).to have_received(:publish_or_spool)
     end
 
     it 'calls Metering.build_event with request_type structured' do
       described_class.structured(messages: messages, schema: schema, model: 'claude-opus-4-6')
-      expect(Legion::Extensions::LLM::Gateway::Runners::Metering)
+      expect(Legion::Extensions::Llm::Gateway::Runners::Metering)
         .to have_received(:build_event).with(hash_including(request_type: 'structured'))
     end
 
@@ -156,7 +156,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
       let(:fleet_double) { double('Fleet', fleet_available?: true) }
 
       before do
-        stub_const('Legion::Extensions::LLM::Gateway::Runners::Fleet', fleet_double)
+        stub_const('Legion::Extensions::Llm::Gateway::Runners::Fleet', fleet_double)
         allow(fleet_double).to receive(:dispatch).and_return(response)
       end
 
@@ -201,7 +201,7 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
         tier:         'cloud',
         intent:       'summarize'
       )
-      expect(Legion::Extensions::LLM::Gateway::Runners::Metering).to have_received(:build_event).with(
+      expect(Legion::Extensions::Llm::Gateway::Runners::Metering).to have_received(:build_event).with(
         hash_including(
           request_type:    'chat',
           provider:        'anthropic',
@@ -218,12 +218,12 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Runners::Inference do
 
     it 'calls Metering.publish_or_spool with the event' do
       metering_event = { request_type: 'chat', provider: 'anthropic' }
-      allow(Legion::Extensions::LLM::Gateway::Runners::Metering)
+      allow(Legion::Extensions::Llm::Gateway::Runners::Metering)
         .to receive(:build_event).and_return(metering_event)
 
       described_class.meter_response(response, request_type: 'chat', provider: 'anthropic',
                                                model_id: nil, latency_ms: 100)
-      expect(Legion::Extensions::LLM::Gateway::Runners::Metering)
+      expect(Legion::Extensions::Llm::Gateway::Runners::Metering)
         .to have_received(:publish_or_spool).with(metering_event)
     end
   end

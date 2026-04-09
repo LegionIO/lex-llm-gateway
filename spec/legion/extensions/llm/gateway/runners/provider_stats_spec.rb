@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'legion/extensions/llm/gateway/runners/provider_stats'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Runners::ProviderStats do
+RSpec.describe Legion::Extensions::Llm::Gateway::Runners::ProviderStats do
   let(:tracker) do
     instance_double('HealthTracker',
                     circuit_state: :closed,

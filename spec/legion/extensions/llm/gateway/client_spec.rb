@@ -6,7 +6,7 @@ require 'legion/extensions/llm/gateway/runners/fleet'
 require 'legion/extensions/llm/gateway/runners/inference'
 require 'legion/extensions/llm/gateway/client'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Client do
+RSpec.describe Legion::Extensions::Llm::Gateway::Client do
   subject(:client) { described_class.new }
 
   let(:response_double) do
@@ -61,8 +61,8 @@ RSpec.describe Legion::Extensions::LLM::Gateway::Client do
     before do
       stub_const('Legion::LLM', double('LLM'))
       allow(Legion::LLM).to receive(:chat).and_return(response_double)
-      allow(Legion::Extensions::LLM::Gateway::Runners::Metering).to receive(:build_event).and_return({})
-      allow(Legion::Extensions::LLM::Gateway::Runners::Metering).to receive(:publish_or_spool)
+      allow(Legion::Extensions::Llm::Gateway::Runners::Metering).to receive(:build_event).and_return({})
+      allow(Legion::Extensions::Llm::Gateway::Runners::Metering).to receive(:publish_or_spool)
     end
 
     it 'delegates chat to Inference runner' do

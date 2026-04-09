@@ -16,12 +16,12 @@ $LOADED_FEATURES << 'legion/extensions/actors/every'
 
 require 'legion/extensions/llm/gateway/actors/spool_flush'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Actor::SpoolFlush do
+RSpec.describe Legion::Extensions::Llm::Gateway::Actor::SpoolFlush do
   subject(:actor) { described_class.allocate }
 
   describe '#runner_class' do
     it 'returns the metering runner class string' do
-      expect(actor.runner_class).to eq('Legion::Extensions::LLM::Gateway::Runners::Metering')
+      expect(actor.runner_class).to eq('Legion::Extensions::Llm::Gateway::Runners::Metering')
     end
   end
 

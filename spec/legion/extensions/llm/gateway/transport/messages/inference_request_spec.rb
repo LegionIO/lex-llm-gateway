@@ -16,7 +16,7 @@ end
 
 require 'legion/extensions/llm/gateway/transport/messages/inference_request'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::InferenceRequest do
+RSpec.describe Legion::Extensions::Llm::Gateway::Transport::Messages::InferenceRequest do
   let(:valid_opts) do
     { model: 'gpt-4o', reply_to: 'agent.queue', correlation_id: 'abc-123' }
   end

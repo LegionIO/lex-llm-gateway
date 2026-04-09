@@ -6,7 +6,7 @@ require_relative 'runners/fleet'
 
 module Legion
   module Extensions
-    module LLM
+    module Llm
       module Gateway
         class Client
           def initialize(**opts)

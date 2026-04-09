@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'legion/extensions/llm/gateway/helpers/rpc'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Helpers::Rpc do
+RSpec.describe Legion::Extensions::Llm::Gateway::Helpers::Rpc do
   describe '.generate_correlation_id' do
     it 'returns a UUID-format string' do
       id = described_class.generate_correlation_id

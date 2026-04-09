@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.14] - 2026-04-09
+
+### Changed
+- Rename module namespace from `Legion::Extensions::LLM::Gateway` to `Legion::Extensions::Llm::Gateway` for framework const_get compatibility
+- Remove `remove_const(:Llm)` / `Llm = LLM` alias hack that caused namespace collisions with other `lex-llm-*` extensions
+
 ## [0.2.13] - 2026-03-30
 
 ### Changed

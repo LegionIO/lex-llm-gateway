@@ -11,7 +11,7 @@ Centralized LLM inference gateway that wraps all LLM calls with automatic meteri
 ## Gem Info
 
 - **Gem name**: `lex-llm-gateway`
-- **Version**: `0.2.12`
+- **Version**: `0.2.13`
 - **Module**: `Legion::Extensions::LLM::Gateway`
 - **Ruby**: `>= 3.4`
 - **License**: MIT

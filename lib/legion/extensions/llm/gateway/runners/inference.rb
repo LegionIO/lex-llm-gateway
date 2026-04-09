@@ -2,7 +2,7 @@
 
 module Legion
   module Extensions
-    module LLM
+    module Llm
       module Gateway
         module Runners
           module Inference
@@ -100,7 +100,7 @@ module Legion
             end
 
             def fleet_available?
-              defined?(Legion::Extensions::LLM::Gateway::Runners::Fleet) &&
+              defined?(Legion::Extensions::Llm::Gateway::Runners::Fleet) &&
                 Fleet.respond_to?(:fleet_available?) && Fleet.fleet_available?
             end
 

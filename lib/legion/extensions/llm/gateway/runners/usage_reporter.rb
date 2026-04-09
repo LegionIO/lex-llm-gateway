@@ -4,7 +4,7 @@ require_relative '../helpers/usage_queries'
 
 module Legion
   module Extensions
-    module LLM
+    module Llm
       module Gateway
         module Runners
           module UsageReporter

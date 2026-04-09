@@ -16,7 +16,7 @@ end
 
 require 'legion/extensions/llm/gateway/transport/messages/inference_response'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Transport::Messages::InferenceResponse do
+RSpec.describe Legion::Extensions::Llm::Gateway::Transport::Messages::InferenceResponse do
   let(:valid_opts) { { correlation_id: 'abc-123' } }
 
   subject(:msg) { described_class.new(**valid_opts) }

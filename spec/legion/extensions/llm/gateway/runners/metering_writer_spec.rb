@@ -3,7 +3,7 @@
 require 'spec_helper'
 require 'legion/extensions/llm/gateway/runners/metering_writer'
 
-RSpec.describe Legion::Extensions::LLM::Gateway::Runners::MeteringWriter do
+RSpec.describe Legion::Extensions::Llm::Gateway::Runners::MeteringWriter do
   describe '.write_metering_record' do
     let(:payload) do
       {
