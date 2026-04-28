@@ -4,7 +4,7 @@ module Legion
   module Extensions
     module Llm
       module Gateway
-        VERSION = '0.2.14'
+        VERSION = '0.2.15'
       end
     end
   end

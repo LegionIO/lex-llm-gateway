@@ -1,18 +1,20 @@
-# lex-llm-gateway: LLM Inference Gateway for LegionIO
+# lex-llm-gateway: Legacy LLM Inference Gateway for LegionIO
 
 **Repository Level 3 Documentation**
-- **Parent**: `/Users/miverso2/rubymine/legion/extensions-core/CLAUDE.md`
-- **Grandparent**: `/Users/miverso2/rubymine/legion/CLAUDE.md`
+- **Parent**: `../CLAUDE.md`
+- **Grandparent**: workspace-level LegionIO guidance
 
 ## Purpose
+
+Legacy compatibility gateway for older deployments that still call `Legion::Extensions::Llm::Gateway`. New LegionIO LLM work should use `legion-llm` directly; the current `legion-llm` uplift owns in-tree metering, fleet transport, and inference routing through `Legion::LLM`.
 
 Centralized LLM inference gateway that wraps all LLM calls with automatic metering over RabbitMQ, fleet RPC dispatch to GPU workers, and local disk spooling for offline resilience. Designed for 100k+ edge nodes that cannot have direct DB access. Includes usage reporting and provider observability.
 
 ## Gem Info
 
 - **Gem name**: `lex-llm-gateway`
-- **Version**: `0.2.13`
-- **Module**: `Legion::Extensions::LLM::Gateway`
+- **Version**: `0.2.15`
+- **Module**: `Legion::Extensions::Llm::Gateway`
 - **Ruby**: `>= 3.4`
 - **License**: MIT
 - **GitHub**: https://github.com/LegionIO/lex-llm-gateway
@@ -20,7 +22,7 @@ Centralized LLM inference gateway that wraps all LLM calls with automatic meteri
 ## Architecture
 
 ```
-Legion::Extensions::LLM::Gateway
+Legion::Extensions::Llm::Gateway
 ├── Transport/
 │   ├── Exchanges/
 │   │   ├── Metering      # llm.metering (topic) — fan-out to multiple consumers
@@ -74,7 +76,7 @@ Full stack (transport + gateway + LLM + fleet)
 
 ## Namespace Caveat
 
-`ensure_namespace` in `Legion::Extensions` may pre-create `Llm` as an empty module before this gem loads. The entry point unconditionally calls `remove_const(:Llm)` then reassigns `Llm = LLM` alias to avoid `uninitialized constant Legion::Extensions::Llm::Gateway`.
+`ensure_namespace` in `Legion::Extensions` may pre-create `Llm` as an empty module before this gem loads. This gem uses the `Legion::Extensions::Llm::Gateway` namespace directly for framework `const_get` compatibility.
 
 ## Runners
 
