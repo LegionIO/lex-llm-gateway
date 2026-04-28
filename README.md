@@ -1,6 +1,9 @@
 # lex-llm-gateway
 
-**Version**: 0.2.13 | **License**: MIT | **Ruby**: >= 3.4
+**Version**: 0.2.15 | **License**: MIT | **Ruby**: >= 3.4
+
+> [!WARNING]
+> `lex-llm-gateway` is legacy compatibility glue. New LegionIO LLM work should use `legion-llm` directly; the current `legion-llm` uplift owns in-tree metering, fleet transport, and inference routing through `Legion::LLM`.
 
 LLM inference gateway for [LegionIO](https://github.com/LegionIO/LegionIO). Provides centralized metering over RabbitMQ, fleet RPC dispatch to GPU workers, and local disk spooling for offline resilience.
 
@@ -48,7 +51,7 @@ Full stack (transport + gateway + LLM + fleet)
 ```ruby
 require 'legion/extensions/llm/gateway/client'
 
-client = Legion::Extensions::LLM::Gateway::Client.new
+client = Legion::Extensions::Llm::Gateway::Client.new
 result = client.chat(model: 'claude-opus-4-6', messages: [{ role: 'user', content: 'Hello' }])
 result[:success]  # => true
 result[:response] # => "Hello! How can I help you?"
@@ -77,7 +80,7 @@ result[:response] # => "Hello! How can I help you?"
 - `legion-transport` (AMQP metering + inference queues)
 - `legion-crypt` (JWT signing for fleet auth, optional)
 - `legion-data` (MeteringWriter and disk spool, optional)
-- `legion-llm` (inference execution on fleet workers)
+- `legion-llm` (preferred inference, fleet, and metering owner for new work)
 
 ## Development
 

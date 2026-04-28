@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.15] - 2026-04-28
+
+### Changed
+- Mark `lex-llm-gateway` as legacy compatibility glue now that the `legion-llm` uplift owns in-tree metering, fleet transport, and inference routing
+- Update README/CLAUDE namespace and version references after the `Llm::Gateway` rename
+
 ## [0.2.14] - 2026-04-09
 
 ### Changed
